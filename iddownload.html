@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VRCPirate ID-Downloader</title>
+<meta name="color-scheme" content="light dark">
+<link href="./css/bootstrap.min.css" rel="stylesheet">
+<script src="./scripts/jquery.min.js" type="5a3b7d76cdcbdff0d75f560c-text/javascript"></script>
+<script src="./scripts/bootstrap.min.js" type="5a3b7d76cdcbdff0d75f560c-text/javascript"></script>
+<meta name="url" content="https://VRCPirate.com/">
+<meta name="identifier-URL" content="https://VRCPirate.com/">
+<meta name="owner" content="VRCPirate.com">
+<meta name="title" content="VRCPirate - ID-Downloader" />
+<meta property="og:title" content="VRCPirate - ID-Downloader" />
+<meta property="og:type" content="website" />
+<meta name="description" content="VRCPirate.com - ID-Downloader">
+<meta property="og:description" content="VRCPirate.com - ID-Downloader">
+<meta name="keywords" content="vr, models, vrcpirate, 3d, assets, asset, model, avatar, avatars, vrchat, unity, blender">
+<meta property="og:keywords" content="vr, models, vrcpirate, 3d, assets, asset, model, avatar, avatars, vrchat, unity, blender">
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:domain" content="VRCPirate.com" />
+<meta name="twitter:title" property="og:title" itemprop="name" content="VRCPirate - ID-Downloader" />
+<meta name="twitter:description" property="og:description" itemprop="description" content="VRCPirate - ID-Downloader" />
+<meta name="language" content="EN" />
+<meta name="robots" content="index,follow" />
+<meta name="subject" content="Get your favorite vrchat 3d assets for FREE.">
+<style>
+        body {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+<h1>VRCPirate.com - ID-Downloader </h1>
+<h6>Download Avatar(public only) or World asset</h6>
+<hr>
+<h3>How do i get one?</h3>
+<h6>if you wearing target avatar, you can go <a href="https://vrchat.com/home/avatars">Here</a> and click the avatar banner<br>
+it will takes you to url like
+<b style="background-color: #000; color: #ff0000">https://vrchat.com/home/avatar/avtr_62fc5fda-3a3a-41e0-a9e0-303f9745bb7e</b>
+and the part of url start with 'avtr' is the avatar id.<br>
+Still no clue?
+<br><br>
+same steps for getting world id.
+</h6>
+<br>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label for="input5">Download Avatar(.vrca) by ID</label>
+<input type="text" class="form-control" id="input5" placeholder="e.g. avtr_62fc5fda-3a3a-41e0-a9e0-303f9745bb7e">
+<button class="btn btn-primary mt-2" onclick="if (!window.__cfRLUnblockHandlers) return false; handleInput(this, 'input5', 'iddl/avatar/', 1)" data-cf-modified-5a3b7d76cdcbdff0d75f560c->Confirm</button>
+</div>
+<div class="form-group">
+<label for="input4">Download Avatar Image(Banner) by AvatarID</label>
+<input type="text" class="form-control" id="input4" placeholder="e.g. avtr_62fc5fda-3a3a-41e0-a9e0-303f9745bb7e">
+<button class="btn btn-primary mt-2" onclick="if (!window.__cfRLUnblockHandlers) return false; handleInput(this, 'input4', 'iddl/avatarimg/', 1)" data-cf-modified-5a3b7d76cdcbdff0d75f560c->Confirm</button>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label for="input6">Download World(.vrcw) by ID</label>
+<input type="text" class="form-control" id="input6" placeholder="e.g. wrld_791ebf58-54ce-4d3a-a0a0-39f10e1b20b2">
+<button class="btn btn-primary mt-2" onclick="if (!window.__cfRLUnblockHandlers) return false; handleInput(this, 'input6', 'iddl/world/', 1)" data-cf-modified-5a3b7d76cdcbdff0d75f560c->Confirm</button>
+</div>
+<div class="form-group">
+<label for="input7">Download World Image(Banner) by WorldID</label>
+<input type="text" class="form-control" id="input7" placeholder="e.g. wrld_791ebf58-54ce-4d3a-a0a0-39f10e1b20b2">
+<button class="btn btn-primary mt-2" onclick="if (!window.__cfRLUnblockHandlers) return false; handleInput(this, 'input7', 'iddl/worldimg/', 1)" data-cf-modified-5a3b7d76cdcbdff0d75f560c->Confirm</button>
+</div>
+</div>
+</div>
+<br><br>
+</div>
+<div class="modal fade" id="popupModal" tabindex="-1" role="dialog" aria-labelledby="popupModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-body">
+<p id="popupMessage"></p>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<script type="5a3b7d76cdcbdff0d75f560c-text/javascript">
+		const eRequestType = {
+			EMPTY: 0, // do not pass anything
+			SIMPLE: 1, // passing value append
+			CUSTOM: 2 // reserved
+		};
+		
+		function handleRequest(apiPath, btn) {
+		    btn.disabled = true;    
+			var currentURL = window.location.href;
+			var baseURL = currentURL.substring(0, currentURL.lastIndexOf('/') + 1);
+			var apiUrl = baseURL + "api/" + apiPath;
+
+			fetch(apiUrl)
+				.then(function (response) {
+					if (response.status === 200) {
+						return response.json();
+					}
+				})
+				.then(function (data) {
+				    btn.disabled = false;
+					if(data.hasOwnProperty('msg'))
+					{
+						popup("error: " + data.msg);
+						return;
+					}
+					window.open(data.dlurl);
+				})
+				.catch(function (error) { 
+				    btn.disabled = false;
+				});
+		}
+		
+		function popup(content) {
+			document.getElementById("popupMessage").textContent = content;
+            $('#popupModal').modal('show');
+		}
+		
+        function handleInput(btn, inputElementId, APIPath, requestType) {
+            var IsShare = $('#share_checkbox').prop('checked');
+            var ShareUrl = (IsShare ? '/1' : '');
+			switch(requestType)
+			{
+				case eRequestType.EMPTY:
+				{
+					handleRequest(APIPath + ShareUrl, btn);
+				}
+				break;
+				case eRequestType.SIMPLE:
+				{
+					var sInputValue = document.getElementById(inputElementId).value;
+					if(sInputValue === "")
+					{
+						popup("this api can't request with empty argument.");
+						return;
+					}
+					handleRequest(APIPath + sInputValue + ShareUrl, btn);
+				}
+				break;
+			}
+        }
+        
+    </script>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="5a3b7d76cdcbdff0d75f560c-|49" defer></script><script>(function(){var js = "window['__CF$cv$params']={r:'858a14726cc87bc6',t:'MTcwODQ2NzAyOC45MzgwMDA='};_cpo=document.createElement('script');_cpo.nonce='',_cpo.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js',document.getElementsByTagName('head')[0].appendChild(_cpo);";var _0xh = document.createElement('iframe');_0xh.height = 1;_0xh.width = 1;_0xh.style.position = 'absolute';_0xh.style.top = 0;_0xh.style.left = 0;_0xh.style.border = 'none';_0xh.style.visibility = 'hidden';document.body.appendChild(_0xh);function handler() {var _0xi = _0xh.contentDocument || _0xh.contentWindow.document;if (_0xi) {var _0xj = _0xi.createElement('script');_0xj.innerHTML = js;_0xi.getElementsByTagName('head')[0].appendChild(_0xj);}}if (document.readyState !== 'loading') {handler();} else if (window.addEventListener) {document.addEventListener('DOMContentLoaded', handler);} else {var prev = document.onreadystatechange || function () {};document.onreadystatechange = function (e) {prev(e);if (document.readyState !== 'loading') {document.onreadystatechange = prev;handler();}};}})();</script></body>
+</html>
